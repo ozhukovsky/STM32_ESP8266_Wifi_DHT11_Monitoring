@@ -39,14 +39,6 @@ char* unknown_html		 = "<!DOCTYPE html>\
 							</body>\
 							</html>";
 
-//char *LED_ON = "<p>LED Status: ON</p><a class=\"button button-off\" href=\"/ledoff\">OFF</a>";
-//char *LED_OFF = "<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/ledon\">ON</a>";
-//char* temp_html_template	 = "<p>Temperature: %s.%s</p>";
-//char* humidity_html_template = "<p>Humidity: %s.%s</p>";
-//
-//char *Terminate = "</body></html>";
-
-//char input_buf[80];
 bool data_received = true;
 RingBuffer ring_buf;
 
@@ -71,7 +63,6 @@ uint8_t ESP_Init(UART_HandleTypeDef* esp_uart, char* ssid, char* pass)
 //
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('1');
 		init_stat = ESP_STAT_NOINIT;
 		goto END_INIT;
 	}
@@ -82,7 +73,6 @@ uint8_t ESP_Init(UART_HandleTypeDef* esp_uart, char* ssid, char* pass)
 
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('2');
 		init_stat = ESP_STAT_NOINIT;
 		goto END_INIT;
 	}
@@ -91,7 +81,6 @@ uint8_t ESP_Init(UART_HandleTypeDef* esp_uart, char* ssid, char* pass)
 
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('3');
 		init_stat = ESP_STAT_NOINIT;
 		goto END_INIT;
 	}
@@ -104,7 +93,6 @@ uint8_t ESP_Init(UART_HandleTypeDef* esp_uart, char* ssid, char* pass)
 
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('4');
 		init_stat = ESP_STAT_NOINIT;
 		goto END_INIT;
 	}
@@ -112,7 +100,6 @@ uint8_t ESP_Init(UART_HandleTypeDef* esp_uart, char* ssid, char* pass)
 	sendCommand("AT+CIPMUX=1\r\n");
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('5');
 		init_stat = ESP_STAT_NOINIT;
 		goto END_INIT;
 	}
@@ -175,7 +162,6 @@ uint8_t serverSend(char *html, uint32_t size, uint8_t link_id)
 
 	if (!waitForInput(">", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('>');
 		ret = COMMAND_ERR;
 		goto END;
 	}
@@ -184,7 +170,6 @@ uint8_t serverSend(char *html, uint32_t size, uint8_t link_id)
 
 	if (!waitForInput("SEND OK", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('S');
 		ret = COMMAND_ERR;
 		goto END;
 	}
@@ -193,7 +178,6 @@ uint8_t serverSend(char *html, uint32_t size, uint8_t link_id)
 
 	if (!waitForInput("OK\r\n", ESP_RESPONSE_TIMEOUT))
 	{
-		ITM_SendChar('O');
 		ret = COMMAND_ERR;
 		goto END;
 	}
@@ -304,7 +288,6 @@ void ESP_UART_IRQHandler(void)
 	if ((usart_sr_reg & USART_SR_RXNE) != RESET)
 	{
 		data = (uint8_t)(huart->Instance->DR);
-
 		RingBuffer_Write(&ring_buf, &data, 1);
 	}
 }

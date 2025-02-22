@@ -52,7 +52,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
-void anotherTask(void);
+static void MX_GPIO_Init(void);
+static void enterSleepMode(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -99,12 +100,9 @@ int main(void)
   {
 	  while (1)
 	  {
-		  if (ESP_CheckPendingData())
-		  {
-			  ESP_ProcessInput();
-		  }
+		  enterSleepMode();
 
-		  anotherTask();
+		  ESP_ProcessInput();
 	  }
   }
     /* USER CODE END WHILE */
@@ -196,22 +194,10 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : PC13 */
-  GPIO_InitStruct.Pin = GPIO_PIN_13;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PA1 */
   GPIO_InitStruct.Pin = GPIO_PIN_1;
@@ -226,10 +212,24 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void anotherTask()
+static void MX_GPIO_DeInit(void)
 {
-	ITM_SendChar('C');
-	HAL_Delay(500);
+	HAL_GPIO_DeInit(GPIOA, GPIO_PIN_1);
+}
+
+static void enterSleepMode(void)
+{
+	MX_GPIO_DeInit();
+
+	HAL_SuspendTick();
+
+	__HAL_RCC_PWR_CLK_ENABLE();
+
+	HAL_PWR_EnterSLEEPMode(0, PWR_SLEEPENTRY_WFI);
+
+	HAL_ResumeTick();
+
+	MX_GPIO_Init();
 }
 /* USER CODE END 4 */
 

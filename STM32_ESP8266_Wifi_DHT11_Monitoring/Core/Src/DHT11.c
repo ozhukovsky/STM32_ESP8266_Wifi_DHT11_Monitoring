@@ -6,63 +6,67 @@
 
 void DHT11_Data(uint8_t* data)
 {
-	uint8_t resp_status 		= 0;
-	uint8_t byte_num, bit, byte = 0;
+	uint8_t resp_status = 0;
+	uint8_t byte_num = 0, bit = 0, byte = 0;
 
-	//START SIGNAL
-	setPinToOutput(GPIOA, GPIO_PIN_1);
-	delayUS_ASM(20000);
-	setPinToInput(GPIOA, GPIO_PIN_1);
+	while (resp_status == 0)
+	{
+		//START SIGNAL
+		setPinToOutput(GPIOA, GPIO_PIN_1);
 
-	//CHECKING RESPONSE
-	// DHT11 - 30us high average + 40us low average
-	delayUS_ASM(40);
+		delayUS_ASM(20000);
+		setPinToInput(GPIOA, GPIO_PIN_1);
 
-    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_RESET)
-    {
-    	delayUS_ASM(80);
+		//CHECKING RESPONSE
+		// DHT11 - 30us high average + 40us low average
+		delayUS_ASM(40);
 
-		if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
-		{
-			resp_status = 1;
+	    if ((GPIOA->IDR & GPIO_PIN_1) == GPIO_PIN_RESET)
+	    {
+	    	delayUS_ASM(80);
 
-			while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET);
-		}
-		else
-		{
-			resp_status = 0;
-		}
-    }
-    else
-    {
-    	resp_status = 0;
-    }
+			if ((GPIOA->IDR & GPIO_PIN_1) != GPIO_PIN_RESET)
+			{
+				resp_status = 1;
 
-    if (resp_status)
-    {
-    	for (; byte_num < 5; byte_num++, byte = 0)
-    	{
-    		for (bit = 0; bit < 8; bit++)
-    		{
-    			while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_RESET);
+				while((GPIOA->IDR & GPIO_PIN_1) != GPIO_PIN_RESET);
+			}
+			else
+			{
+				resp_status = 0;
+			}
+	    }
+	    else
+	    {
+	    	resp_status = 0;
+	    }
 
-				delayUS_ASM(35);
+	    if (resp_status)
+	    {
+	    	for (; byte_num < 5; byte_num++, byte = 0)
+	    	{
+	    		for (bit = 0; bit < 8; bit++)
+	    		{
+	    			while((GPIOA->IDR & GPIO_PIN_1) == GPIO_PIN_RESET);
 
-				if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET)
-				{
-					byte |= 0x80 >> bit;
-				}
+					delayUS_ASM(35);
 
-				while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1) == GPIO_PIN_SET);
-    		}
+					if((GPIOA->IDR & GPIO_PIN_1) != GPIO_PIN_RESET)
+					{
+						byte |= 0x80 >> bit;
+					}
 
-    		data[byte_num] = byte;
-    	}
-    }
-    else
-    {
-    	data[4] = 0;
-    }
+					while((GPIOA->IDR & GPIO_PIN_1) != GPIO_PIN_RESET);
+	    		}
+
+	    		data[byte_num] = byte;
+	    	}
+	    }
+	    else
+	    {
+	    	data[4] = 0;
+	    }
+	}
 }
 
 void setPinToInput(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {

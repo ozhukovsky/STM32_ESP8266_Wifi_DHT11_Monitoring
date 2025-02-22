@@ -60,8 +60,8 @@ all: main-build
 main-build: STM32_ESP8266_Wifi_DHT11_Monitoring.elf secondary-outputs
 
 # Tool invocations
-STM32_ESP8266_Wifi_DHT11_Monitoring.elf STM32_ESP8266_Wifi_DHT11_Monitoring.map: $(OBJS) $(USER_OBJS) D:\Projects\STM32CubeIDE\MainWorkspace\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32_ESP8266_Wifi_DHT11_Monitoring.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Projects\STM32CubeIDE\MainWorkspace\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32_ESP8266_Wifi_DHT11_Monitoring.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32_ESP8266_Wifi_DHT11_Monitoring.elf STM32_ESP8266_Wifi_DHT11_Monitoring.map: $(OBJS) $(USER_OBJS) D:\Projects\STM32CubeIDE_Git\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32_ESP8266_Wifi_DHT11_Monitoring.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Projects\STM32CubeIDE_Git\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32_ESP8266_Wifi_DHT11_Monitoring\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32_ESP8266_Wifi_DHT11_Monitoring.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
