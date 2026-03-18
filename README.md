@@ -20,7 +20,7 @@ This project demonstrates:
 
 ---
 
-## 🚀 Features
+## Features
 
 - Wi‑Fi connection via ESP8266 (AT firmware)
 - HTTP server on port 80
@@ -37,7 +37,7 @@ This project demonstrates:
   - `main.c` — system initialization and main loop
 ---
 
-## 🌡 How It Works
+## How It Works
 
 ### 1. ESP8266 Initialization
 The MCU sends a sequence of AT commands:
@@ -81,13 +81,13 @@ Between requests, MCU enters sleep:
 HAL_PWR_EnterSLEEPMode(0, PWR_SLEEPENTRY_WFI);
 ```
 
-🖥 Example Web Output
+## Example Web Output
 
 ESP8266 DHT Server
 Temperature: 23.4
 Humidity:    45.0
 
-🔧 Requirements
+## Requirements
 
 - STM32F103 (or similar)
 
@@ -99,7 +99,7 @@ Humidity:    45.0
 
 - STM32CubeIDE or compatible toolchain
 
-🛠 Build & Flash
+## Build & Flash
 
 - Open project in STM32CubeIDE
 
@@ -116,7 +116,7 @@ ESP_Init(&huart1, "SSID", "PASSWORD");
     
 http://<esp_ip>/check_dht
 
-📌 Notes
+## Notes
 
 - HTML template is embedded directly in firmware
 
