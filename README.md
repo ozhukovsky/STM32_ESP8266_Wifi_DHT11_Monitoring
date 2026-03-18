@@ -55,8 +55,6 @@ If all responses return `OK`, the server starts.
 ESP8266 sends data in the form:
 
 +IPD,<link_id>,<len>:GET /check_dht HTTP/1.1
-Код
-
 
 The firmware:
 
