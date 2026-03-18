@@ -1,7 +1,5 @@
 # STM32 ESP8266 Wi‑Fi DHT11 Monitoring Server
 
-IDE: STM32CubeIDE
-
 A lightweight embedded web server running on an STM32 microcontroller with an ESP8266 Wi‑Fi module.  
 The system reads temperature and humidity from a DHT11 sensor and serves the data through a simple HTTP webpage.
 
